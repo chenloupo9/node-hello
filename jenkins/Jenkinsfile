@@ -11,6 +11,11 @@ node {
         checkout scm
         sh "git rev-parse --short HEAD > .git/commit-id"
         commit_id = readFile('.git/commit-id')
+	echo scm.branches[0].name
+	echo env.BRANCH_NAME
+
+
+
 
 
     }

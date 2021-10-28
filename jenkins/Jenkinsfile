@@ -1,9 +1,10 @@
 #!/usr/bin/env groovy
 /* some comments */
+/*
 properties([
 	pipelineTriggers([cron('H/2 * * * *')])
                 ])
-
+*/
 node {
     def commit_id
     stage('Prepare') {

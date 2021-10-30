@@ -1,12 +1,18 @@
 #!/usr/bin/env groovy
+/* some comments */
+/*
+properties([
+	pipelineTriggers([cron('H/2 * * * *')])
+                ])
+*/
 node {
     def commit_id
     stage('Prepare') {
-        git 'https://github.com/nlitterat/node-hello.git'
+        checkout scm
         sh "git rev-parse --short HEAD > .git/commit-id"
         commit_id = readFile('.git/commit-id')
-        
-        
+	echo scm.branches[0].name
+	echo env.BRANCH_NAME
     }
     stage('Compile') {
         sh 'npm install'
@@ -16,4 +22,9 @@ node {
            docker.build("nlitterat/compie").push("${commit_id}")
          }
     }
+    stage('deploy with helm') {
+        sh 'helm upgrade -i node-hello deploy/helm/.'
+    }
 }
+
+

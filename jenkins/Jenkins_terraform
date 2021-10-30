@@ -56,10 +56,12 @@ pipeline {
 
 
             steps {
-                sh 'pwd'
-                def plan = readFile 'deploy/terraform/tfplan.txt'
-                input message: "Do you want to apply the plan?",
-                        parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
+                step {
+                    sh 'pwd'
+                    def plan = readFile 'deploy/terraform/tfplan.txt'
+                    input message: "Do you want to apply the plan?",
+                            parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
+                }
             }
         }
 
@@ -71,9 +73,11 @@ pipeline {
             }
 
             steps {
-                dir("deploy/terraform") {
-                    sh 'pwd'
-                    sh "terraform apply -input=false tfplan"
+                step {
+                    dir("deploy/terraform") {
+                        sh 'pwd'
+                        sh "terraform apply -input=false tfplan"
+                    }
                 }
             }
         }
@@ -84,9 +88,11 @@ pipeline {
             }
 
             steps {
-                dir("deploy/terraform") {
-                    sh 'pwd'
-                    sh "terraform destroy --auto-approve"
+                step {
+                    dir("deploy/terraform") {
+                        sh 'pwd'
+                        sh "terraform destroy --auto-approve"
+                    }
                 }
             }
         }

@@ -7,6 +7,7 @@ properties([
 */
 node {
     def commit_id
+    def namespace ="development"
     stage('Prepare') {
         checkout scm
         sh "git rev-parse --short HEAD > .git/commit-id"
@@ -23,8 +24,11 @@ node {
          }
     }
     stage('deploy with helm') {
+        if (env.BRANCH_NAME == "master") {
+            namespace = "production"
+        }
         sh 'helm template deploy/helm/.'
-        sh "helm upgrade -i  node-hello  --set image.tag=\"${commit_id}\" deploy/helm/."
+        sh "helm upgrade -i  node-hello  --set image.tag=\"${commit_id}\" --create-namespace --namespace ${namespace} deploy/helm/."
     }
 }
 

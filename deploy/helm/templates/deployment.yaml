@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: node-hello
-        image: nlitterat/compie
+        image: nlitterat/compie:{{ .Values.image.tag }}
         ports:
         - containerPort: 3000
